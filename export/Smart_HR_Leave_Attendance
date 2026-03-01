@@ -1,0 +1,3613 @@
+/*
+ * Author       : arthi2410665_ssn
+ * Generated on : 01-Mar-2026 22:38:13
+ * Version      : 1.0
+ */
+ application "Smart HR Leave and Attendance"
+ {
+ 	date format = "dd-MMM-yyyy"
+ 	time zone = "America/Los_Angeles"
+ 	time format = "24-hr"
+ 	forms
+	{
+		form attendance_records
+		{
+			displayname = "Attendance Records"
+			success message = "Attendance Record Added Successfully"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			employee
+			(
+				type = picklist	
+				displayname = "Employee"
+				values  = zoho_people_employee.ID
+    			displayformat = [email_address]
+				allow new entries
+				[
+					displayname = "Add New"
+				]
+				sortorder = ascending
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			date_1
+			(
+    			type = date
+				displayname = "Date"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			check_in
+			(
+    			type = time
+				displayname = "Check-in Time"
+				timedisplayoptions = "hh:mm:ss" 
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			check_out
+			(
+    			type = time
+				displayname = "Check-out Time"
+				timedisplayoptions = "hh:mm:ss" 
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			total_hours
+			(
+				type = decimal
+				displayname = "Total Working Hours"
+				maxchar = 16
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			status
+			(
+				type = picklist
+				displayname = "Status"
+				values = {"Late","Present","Absent"}
+				others option = true
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+			blueprint components
+			{
+				stages = {"Attendance Record Created","Check-in Verified","Check-in Missing Alert","Check-out Recorded","Check-out Missing Alert","Hours Validated","Hours Anomaly Alert","Attendance Approved","Attendance Rejected","Attendance Reviewed","Attendance Marked Absent","Attendance Marked Incomplete","Attendance Finalized","Attendance Re-submitted"}
+			}
+		}
+		form employees
+		{
+			displayname = "Employees"
+			success message = "Employee Added Successfully"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			name
+			(
+    			type = name
+				displayname = "Name"
+     			prefix
+     			(
+	     			 type = prefix
+	     			 displayname ="Prefix"
+	     			 visibility = false
+	     			 value = {"Mr.","Mrs.","Ms."}
+     			) 
+     			first_name
+     			(
+	     			 type = first_name
+	     			 displayname ="First Name"
+     			) 
+     			last_name
+     			(
+	     			 type = last_name
+	     			 displayname ="Last Name"
+	     			 visibility = false
+     			) 
+     			suffix
+     			(
+	     			 type = suffix
+	     			 displayname ="Suffix"
+	     			 visibility = false
+     			) 
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			email
+			(
+    			type = email
+				displayname = "Email"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			department
+			(
+				type = picklist	
+				displayname = "Department"
+				values  = zoho_people_department.ID
+    			displayformat = [department_name]
+				allow new entries
+				[
+					displayname = "Add New"
+				]
+				sortorder = ascending
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			role
+			(
+				type = picklist	
+				displayname = "Role"
+				values  = zoho_people_designation.ID
+    			displayformat = [designation_name]
+				allow new entries
+				[
+					displayname = "Add New"
+				]
+				sortorder = ascending
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			joining_date
+			(
+    			type = date
+				displayname = "Joining Date"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			annual_leave_balance
+			(
+				type = number
+				displayname = "Annual Leave Balance"
+				maxchar = 19
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			sick_leave_balance
+			(
+				type = number
+				displayname = "Sick Leave Balance"
+				maxchar = 19
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			status
+			(
+				type = radiobuttons
+				displayname = "Status"
+				values = {"Active","Inactive"}
+				others option = true
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		form leave_balances
+		{
+			displayname = "Leave Balances"
+			success message = "Balance Left Successfully"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			employee
+			(
+				type = picklist	
+				displayname = "Employee"
+				values  = zoho_people_employee.ID
+    			displayformat = [email_address]
+				allow new entries
+				[
+					displayname = "Add New"
+				]
+				sortorder = ascending
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			annual_balance
+			(
+				type = number
+				displayname = "Annual Leave Balance"
+				maxchar = 19
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			sick_balance
+			(
+				type = number
+				displayname = "Sick Leave Balance"
+				maxchar = 19
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			last_updated
+			(
+    			type = datetime
+				displayname = "Last Updated"
+				timedisplayoptions = "hh:mm:ss"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		form leave_requests
+		{
+			displayname = "Leave Requests"
+			success message = "Request Left Successfully"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			employee
+			(
+				type = picklist	
+				displayname = "Employee"
+				values  = zoho_people_employee.ID
+    			displayformat = [email_address]
+				allow new entries
+				[
+					displayname = "Add New"
+				]
+				sortorder = ascending
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			leave_type
+			(
+				type = picklist
+				displayname = "Leave Type"
+				values = {"Annual","Sick","Casual"}
+				others option = true
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			start_date
+			(
+    			type = date
+				displayname = "Start Date"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			end_date
+			(
+    			type = date
+				displayname = "End Date"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			days_requested
+			(
+				type = number
+				displayname = "Number of Days"
+				maxchar = 19
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			reason
+			(
+    			type = textarea
+				displayname = "Reason"
+				height = 100px
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			status
+			(
+				type = picklist
+				displayname = "Status"
+				values = {"Approved","Rejected","Pending"}
+				others option = true
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			manager_comment
+			(
+    			type = textarea
+				displayname = "Manager Approval Comment"
+				height = 100px
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			submitted_at
+			(
+    			type = datetime
+				displayname = "Submitted At"
+				timedisplayoptions = "hh:mm:ss"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+			blueprint components
+			{
+				stages = {"Leave Request Submitted","Pending Manager Approval","Approved","Rejected","Pending Additional Information","Leave Confirmed","Pending HR Review","Leave in Progress","Leave Cancelled","Leave Completed","Leave Extended","Leave Closed"}
+			}
+		}
+		form notifications
+		{
+			displayname = "Notifications"
+			success message = "Notification Added Successfully"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			recipient
+			(
+    			type = text
+				displayname = "Recipient"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			type_1
+			(
+				type = picklist
+				displayname = "Type"
+				values = {"Leave Request Submitted","Leave Rejected","Leave Approved","Attendance Alert"}
+				others option = true
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			message
+			(
+    			type = textarea
+				displayname = "Message"
+				height = 100px
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			sent_at
+			(
+    			type = datetime
+				displayname = "Sent At"
+				timedisplayoptions = "hh:mm:ss"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			is_read
+			(
+    			type = checkbox
+				displayname = "Is Read"
+				initial value = false
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		form zoho_people_department
+		{
+			displayname = "Zoho People Department"
+			success message = "Data Added Successfully!"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			department_name
+			(
+    			type = text
+				displayname = "Department Name"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			mail_alias
+			(
+    			type = email
+				displayname = "Mail Alias"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		form zoho_people_designation
+		{
+			displayname = "Zoho People Designation"
+			success message = "Data Added Successfully!"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			designation_name
+			(
+    			type = text
+				displayname = "Designation Name"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			mail_alias
+			(
+    			type = email
+				displayname = "Mail Alias"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		form zoho_people_employee
+		{
+			displayname = "Zoho People Employee"
+			success message = "Data Added Successfully!"
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			about_me
+			(
+    			type = textarea
+				displayname = "About Me"
+				height = 100px
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			date_of_birth
+			(
+    			type = date
+				displayname = "Date of Birth"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			date_of_exit
+			(
+    			type = date
+				displayname = "Date of Exit"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			date_of_joining
+			(
+    			type = date
+				displayname = "Date of Joining"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			email_address
+			(
+    			type = email
+				displayname = "Email address"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			employment_type
+			(
+    			type = text
+				displayname = "Employment Type"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			employee_id
+			(
+    			type = text
+				displayname = "Employee ID"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			employee_status
+			(
+    			type = text
+				displayname = "Employee Status"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			ask_me_about_expertise
+			(
+    			type = textarea
+				displayname = "Ask me about/Expertise"
+				height = 100px
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			extension
+			(
+    			type = text
+				displayname = "Extension"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			first_name1
+			(
+    			type = text
+				displayname = "First Name"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			gender
+			(
+    			type = text
+				displayname = "Gender"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			last_name1
+			(
+    			type = text
+				displayname = "Last Name"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			marital_status
+			(
+    			type = text
+				displayname = "Marital Status"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			personal_mobile_number
+			(
+    			type = text
+				displayname = "Personal Mobile Number"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			preferred_name
+			(
+    			type = text
+				displayname = "Preferred Name"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			personal_email_address
+			(
+    			type = email
+				displayname = "Personal Email Address"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			single_line_1
+			(
+    			type = text
+				displayname = "Single Line 1"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			social_security_system_joined_date
+			(
+    			type = date
+				displayname = "Social Security System Joined Date"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			source_of_hire
+			(
+    			type = text
+				displayname = "Source of Hire"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			tags
+			(
+    			type = textarea
+				displayname = "Tags"
+				height = 100px
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			seating_location
+			(
+    			type = text
+				displayname = "Seating Location"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			work_phone_number
+			(
+    			type = text
+				displayname = "Work Phone Number"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+	}
+	reports
+	{
+		list employees_Report
+		{
+			displayName = "All Employees"
+			show all rows from employees    
+			(
+				name  as "Name"
+	 			(
+	      			displayformat = [first_name+""+prefix+""+last_name+""+suffix]
+	 			)
+				email as "Email"
+				department as "Department"
+				role as "Role"
+				joining_date as "Joining Date"
+				annual_leave_balance as "Annual Leave Balance"
+				sick_leave_balance as "Sick Leave Balance"
+				status as "Status"
+			)
+		}
+		list leave_requests_Report
+		{
+			displayName = "All Requests"
+			show all rows from leave_requests    
+			(
+				employee as "Employee"
+				leave_type as "Leave Type"
+				start_date as "Start Date"
+				end_date as "End Date"
+				days_requested as "Number of Days"
+				reason as "Reason"
+				status as "Status"
+				manager_comment as "Manager Approval Comment"
+				submitted_at as "Submitted At"
+			)
+			conditional formatting
+			(
+				"New Formatting1"
+				{
+				condition = (leave_type == "Annual")
+				fields = [leave_type]
+				format = "color:#ffffff;background-color:#765f89;"
+				}
+				"New Formatting2"
+				{
+				condition = (leave_type == "Casual")
+				fields = [leave_type]
+				format = "color:#000000;background-color:#1bbc9b;"
+				}
+				"New Formatting3"
+				{
+				condition = (leave_type == "Sick")
+				fields = [leave_type]
+				format = "color:#ffffff;background-color:#e84c3d;"
+				}
+			)
+		}
+		kanban leave_requests_by_leave_type
+		{
+			displayName = "Leave Types"
+			show all rows from leave_requests    
+			(
+				employee as "Employee"
+				leave_type as "Leave Type"
+				start_date as "Start Date"
+				end_date as "End Date"
+				days_requested as "Number of Days"
+				reason as "Reason"
+				status as "Status"
+				manager_comment as "Manager Approval Comment"
+				submitted_at as "Submitted At"
+			)
+			options
+			(
+	 			display field = leave_type
+	 		)
+		}
+		list attendance_records_Report
+		{
+			displayName = "All Attendance Records"
+			show all rows from attendance_records    
+			(
+				employee as "Employee"
+				date_1 as "Date"
+				check_in as "Check-in Time"
+				check_out as "Check-out Time"
+				total_hours as "Total Working Hours"
+				status as "Status"
+			)
+			conditional formatting
+			(
+				"New Formatting1"
+				{
+				condition = (status == "Absent")
+				fields = [status]
+				format = "color:#ffffff;background-color:#765f89;"
+				}
+				"New Formatting2"
+				{
+				condition = (status == "Late")
+				fields = [status]
+				format = "color:#000000;background-color:#1bbc9b;"
+				}
+				"New Formatting3"
+				{
+				condition = (status == "Present")
+				fields = [status]
+				format = "color:#ffffff;background-color:#e84c3d;"
+				}
+			)
+		}
+		kanban attendance_records_by_status
+		{
+			displayName = "Statuses"
+			show all rows from attendance_records    
+			(
+				employee as "Employee"
+				date_1 as "Date"
+				check_in as "Check-in Time"
+				check_out as "Check-out Time"
+				total_hours as "Total Working Hours"
+				status as "Status"
+			)
+			options
+			(
+	 			display field = status
+	 		)
+		}
+		list leave_balances_Report
+		{
+			displayName = "All Balances"
+			show all rows from leave_balances    
+			(
+				employee as "Employee"
+				annual_balance as "Annual Leave Balance"
+				sick_balance as "Sick Leave Balance"
+				last_updated as "Last Updated"
+			)
+		}
+		list notifications_Report
+		{
+			displayName = "All Notifications"
+			show all rows from notifications    
+			(
+				recipient as "Recipient"
+				type_1 as "Type"
+				message as "Message"
+				sent_at as "Sent At"
+				is_read as "Is Read"
+			)
+			conditional formatting
+			(
+				"New Formatting1"
+				{
+				condition = (type_1 == "Attendance Alert")
+				fields = [type_1]
+				format = "color:#ffffff;background-color:#765f89;"
+				}
+				"New Formatting2"
+				{
+				condition = (type_1 == "Leave Approved")
+				fields = [type_1]
+				format = "color:#000000;background-color:#1bbc9b;"
+				}
+				"New Formatting3"
+				{
+				condition = (type_1 == "Leave Rejected")
+				fields = [type_1]
+				format = "color:#ffffff;background-color:#e84c3d;"
+				}
+			)
+		}
+		kanban notifications_by_type_1
+		{
+			displayName = "Types"
+			show all rows from notifications    
+			(
+				recipient as "Recipient"
+				type_1 as "Type"
+				message as "Message"
+				sent_at as "Sent At"
+				is_read as "Is Read"
+			)
+			options
+			(
+	 			display field = type_1
+	 		)
+		}
+		list zoho_people_employee_Report
+		{
+			displayName = "Zoho People Employee Report"
+			show all rows from zoho_people_employee    
+			(
+				about_me as "About Me"
+				date_of_birth as "Date of Birth"
+				date_of_exit as "Date of Exit"
+				date_of_joining as "Date of Joining"
+				email_address as "Email address"
+				employment_type as "Employment Type"
+				employee_id as "Employee ID"
+				employee_status as "Employee Status"
+				ask_me_about_expertise as "Ask me about/Expertise"
+				extension as "Extension"
+				first_name1 as "First Name"
+				gender as "Gender"
+				last_name1 as "Last Name"
+				marital_status as "Marital Status"
+				personal_mobile_number as "Personal Mobile Number"
+				preferred_name as "Preferred Name"
+				personal_email_address as "Personal Email Address"
+				single_line_1 as "Single Line 1"
+				social_security_system_joined_date as "Social Security System Joined Date"
+				source_of_hire as "Source of Hire"
+				tags as "Tags"
+				seating_location as "Seating Location"
+				work_phone_number as "Work Phone Number"
+			)
+		}
+		list zoho_people_designation_Report
+		{
+			displayName = "Zoho People Designation Report"
+			show all rows from zoho_people_designation    
+			(
+				designation_name as "Designation Name"
+				mail_alias as "Mail Alias"
+			)
+		}
+		list zoho_people_department_Report
+		{
+			displayName = "Zoho People Department Report"
+			show all rows from zoho_people_department    
+			(
+				department_name as "Department Name"
+				mail_alias as "Mail Alias"
+			)
+		}
+	}
+	pages
+	{
+		page DashBoard
+		{
+			displayname = "Dashboard"
+			Content="<zml    \t\t\n\t\t\n\t\t\n\t\t\n\t\t\n>\n\t<layout>\n\t<row>\n\t<column\n   \t\t width='28%'\n   \t>\n\t<panel elementName='Panel 1'\n \n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpadding = '20px'\n\tbgColor = '#FFFFFF'\n\n\t\twidth = '100%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n\t\tvAlign = 'middle'\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginRight = '7px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = '#FFFFFF'\n\tbgColor = 'theme'\n\twidth = '50px'\n\theight = '50px'\n\ttype = 'icon'\n\tvalue = 'business-progress'\n\tsize = '16px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\tpadding = '5px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\t\thAlign = 'left'\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmargin = '0px'\n\tpadding = '0px'\n\tcolor = 'theme'\n\tsize = '20px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\tcornerRadius = '2px'\n\n\n\tdisplayType = 'actual'\n\tdecimalPlaces = '2'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n    borderColor = '#5051F9'\n    borderWidth = '0px'\n\n\t  value = 'thisapp.attendance_records.total_hours.avg'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '0px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '3px'\n\tcolor = '#44404C'\n\tsize = '15px'\n\ttype = 'Text'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\n\n\n\n\n\t  value = 'Average of Total Working Hours'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column><column\n   \t\t width='25%'\n   \t>\n\t<panel elementName='Panel 2'\n \n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpadding = '20px'\n\tbgColor = '#FFFFFF'\n\n\t\twidth = '100%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n\t\tvAlign = 'middle'\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginRight = '7px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = '#FFFFFF'\n\tbgColor = 'theme'\n\twidth = '50px'\n\theight = '50px'\n\ttype = 'icon'\n\tvalue = 'users-single-04'\n\tsize = '16px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\tpadding = '5px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\t\thAlign = 'left'\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmargin = '0px'\n\tpadding = '0px'\n\tcolor = 'theme'\n\tsize = '20px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\tcornerRadius = '2px'\n\n\n\tdisplayType = 'actual'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n    borderColor = '#5051F9'\n    borderWidth = '0px'\n\n\t  value = 'thisapp.employees.ID.count'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '0px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '3px'\n\tcolor = '#44404C'\n\tsize = '15px'\n\ttype = 'Text'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\n\n\n\n\n\t  value = 'Total Employees'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column><column\n   \t\t width='24%'\n   \t>\n\t<panel elementName='Panel 3'\n \n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpadding = '20px'\n\tbgColor = '#FFFFFF'\n\n\t\twidth = '100%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n\t\tvAlign = 'middle'\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginRight = '7px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = '#FFFFFF'\n\tbgColor = 'theme'\n\twidth = '50px'\n\theight = '50px'\n\ttype = 'icon'\n\tvalue = 'travel-world'\n\tsize = '16px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\tpadding = '5px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\t\thAlign = 'left'\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmargin = '0px'\n\tpadding = '0px'\n\tcolor = 'theme'\n\tsize = '20px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\tcornerRadius = '2px'\n\n\n\tdisplayType = 'actual'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n    borderColor = '#5051F9'\n    borderWidth = '0px'\n\n\t  value = 'thisapp.leave_requests.ID.count'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '0px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '3px'\n\tcolor = '#44404C'\n\tsize = '15px'\n\ttype = 'Text'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\n\n\n\n\n\t  value = 'Total Requests'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column><column\n   \t\t width='23%'\n   \t>\n\t<panel elementName='Panel 4'\n \n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpadding = '20px'\n\tbgColor = '#FFFFFF'\n\n\t\twidth = '100%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n\t\tvAlign = 'middle'\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginRight = '7px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = '#FFFFFF'\n\tbgColor = 'theme'\n\twidth = '50px'\n\theight = '50px'\n\ttype = 'icon'\n\tvalue = 'travel-world'\n\tsize = '16px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\tpadding = '5px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\t\thAlign = 'left'\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmargin = '0px'\n\tpadding = '0px'\n\tcolor = 'theme'\n\tsize = '20px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\tcornerRadius = '2px'\n\n\n\tdisplayType = 'actual'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n    borderColor = '#5051F9'\n    borderWidth = '0px'\n\n\t  value = 'thisapp.attendance_records.ID.count'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '0px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '3px'\n\tcolor = '#44404C'\n\tsize = '15px'\n\ttype = 'Text'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\n\n\n\n\n\t  value = 'Total Attendance Records'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column>\n</row><row>\n\t<column\n   \t\t width='40%'\n   \t>\n\t<chart \n\telementName='Chart 1'\n\n\t\n\ttitle = 'Sick Leave Balance by Annual Leave Balance'\n\t\n\ttype = 'Scatter'\n\txtitle = 'Sick Leave Balance'\n\tytitle = 'Annual Leave Balance'\n\tbgColor = '#FFFFFF'\n\ttheme = 'theme'\n\tlegendPos = 'none'\n\theightType = 'auto'\n\theightValue = '300px'\n\tappLinkName = 'thisapp'\n\tformLinkName = 'employees'\n\txfield = 'sick_leave_balance'\n\tyfields = 'value:annual_leave_balance'\n\t\tDelugeCriteria = 'sick_leave_balance is not null'\n/>\n\n</column><column\n   \t\t width='35%'\n   \t>\n\t<panel elementName='Grouped_Panel 1'\n \n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tbgColor = '#FFFFFF'\n\n\t\twidth = '100%'\n>\n\t<pr \n\t\t\twidth='fill'\n\t\theight='50px'\n>\n\t<pc \n\t\tpadding = '0px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\t\twidth = '100%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '20px'\n\tmarginRight = '20px' \n\tcolor = '#000000'\n\tsize = '16px'\n\ttype = 'Text'\n\n\n\n\n\n\n\n\t  value = 'Statuses'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr><pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpadding = '17px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n    borderColor = '#444444'\n    borderWidth = '0px'\n\t\twidth = '50%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n    \tcornerRadius = '2px'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n\t\tvAlign = 'middle'\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginRight = '7px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = 'theme'\n\tbgColor = '#F1F2F4'\n\twidth = '50px'\n\theight = '50px'\n\ttype = 'icon'\n\tvalue = 'design-todo'\n\tsize = '16px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\tpadding = '5px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\t\thAlign = 'left'\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmargin = '0px'\n\tcolor = 'theme'\n\tsize = '20px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\n\tdisplayType = 'actual'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n\n\t\tcriteria = 'status == &quot;Approved&quot;'\n\t  value = 'thisapp.leave_requests.status.count'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '0px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '3px'\n\tcolor = '#44404C'\n\tsize = '15px'\n\ttype = 'Text'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\n\n\n\n\n\t  value = 'Approved'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc><pc \n\t\tpaddingTop = '17px'\n\tpaddingLeft = '0px'\n\tpaddingRight = '17px'\n\tpaddingBottom = '17px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\t\twidth = '50%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n\t\tvAlign = 'middle'\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginRight = '7px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = 'theme'\n\tbgColor = '#F1F2F4'\n\twidth = '50px'\n\theight = '50px'\n\ttype = 'icon'\n\tvalue = 'design-todo'\n\tsize = '16px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\tpadding = '5px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\t\thAlign = 'left'\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmargin = '0px'\n\tcolor = 'theme'\n\tsize = '20px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\n\tdisplayType = 'actual'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n\n\t\tcriteria = 'status == &quot;Rejected&quot;'\n\t  value = 'thisapp.leave_requests.status.count'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '0px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '3px'\n\tcolor = '#44404C'\n\tsize = '15px'\n\ttype = 'Text'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\n\n\n\n\n\t  value = 'Rejected'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr><pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpadding = '17px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n    borderColor = '#444444'\n    borderWidth = '0px'\n\t\twidth = '50%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n    \tcornerRadius = '2px'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n\t\tvAlign = 'middle'\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginRight = '7px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = 'theme'\n\tbgColor = '#F1F2F4'\n\twidth = '50px'\n\theight = '50px'\n\ttype = 'icon'\n\tvalue = 'ui-2-hourglass'\n\tsize = '16px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\tpadding = '5px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\t\thAlign = 'left'\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmargin = '0px'\n\tcolor = 'theme'\n\tsize = '20px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\n\tdisplayType = 'actual'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n\n\t\tcriteria = 'status == &quot;Pending&quot;'\n\t  value = 'thisapp.leave_requests.status.count'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '0px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '3px'\n\tcolor = '#44404C'\n\tsize = '15px'\n\ttype = 'Text'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\n\n\n\n\n\t  value = 'Pending'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc><pc \n\t\tpaddingTop = '17px'\n\tpaddingLeft = '0px'\n\tpaddingRight = '17px'\n\tpaddingBottom = '17px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\t\twidth = '50%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n\t\tvAlign = 'middle'\n>\n\t<image  \n\t\tmarginLeft = '0px'\n\tmarginRight = '7px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = 'theme'\n\tbgColor = '#F1F2F4'\n\twidth = '50px'\n\theight = '50px'\n\ttype = 'icon'\n\tvalue = 'travel-world'\n\tsize = '16px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\tpadding = '5px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\t\thAlign = 'left'\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmargin = '0px'\n\tcolor = 'theme'\n\tsize = '20px'\n\tbold = 'true' \n\ttype = 'Form Data'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\n\tdisplayType = 'actual'\n\tthousandsSeperator = 'LOCALE'\n\tdecimalSeperator = 'DOT'\n\tnumberScale = 'none'\n\n\n\n\n\t  value = 'thisapp.leave_requests.status.count'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '0px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '3px'\n\tcolor = '#44404C'\n\tsize = '15px'\n\ttype = 'Text'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\n\n\n\n\n\t  value = 'Total'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column><column\n   \t\t width='25%'\n   \t>\n\t<panel elementName='Panel_Button 1'\n \n >\n\t<pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tbgColor = '#FFFFFF'\n\n\t\twidth = '100%'\n>\n\t<pr \n\t\t\twidth='fill'\n\t\theight='50px'\n>\n\t<pc \n\t\tpadding = '0px'\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\t\twidth = '100%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t<text \n\n\tmarginLeft = '20px'\n\tmarginRight = '20px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\tcolor = '#2D2D2D'\n\tsize = '16px'\n\ttype = 'Text'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\n\n\n\n\n\n\t  value = 'Quick Links'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr><pr \n\t\t\twidth='fill'\n\t\theight='fill'\n>\n\t<pc \n\t\tpaddingTop = '0px'\n\tpaddingLeft = '10px'\n\tpaddingRight = '10px'\n\tpaddingBottom = '10px'\n\tbgColor = '#FFFFFF'\n\n\t\twidth = '100%'\n\t\thAlign = 'left'\n\t\tvAlign = 'middle'\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\tpadding = '5px'\n\n\t\thAlign = 'left'\n>\n\t<pr \n\t>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '5px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = 'theme'\n\tbgColor = '#F1F2F4'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'ui-2-square-add-08'\n\tsize = '16px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n\t\thAlign = 'left'\n>\n\t<text \n    action = 'OpenForm'\n\t\tcomponentLinkName = 'employees'\n\t\ttarget = 'new-window'\n\n\tmarginLeft = '12px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\tpadding = '0px'\n\tcolor = 'theme'\n\tsize = '15px'\n\ttype = 'Text'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\tcornerRadius = '2px'\n\n\n\n\n\n    borderColor = '#5051F9'\n    borderWidth = '0px'\n\n\t  value = 'Add New Employees'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\tpadding = '8px'\n\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t\n</pc>\n</pr>\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '5px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = 'theme'\n\tbgColor = '#F1F2F4'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'ui-2-square-add-08'\n\tsize = '16px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n\t\thAlign = 'left'\n>\n\t<text \n    action = 'OpenForm'\n\t\tcomponentLinkName = 'leave_requests'\n\t\ttarget = 'new-window'\n\n\tmarginLeft = '12px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\tpadding = '0px'\n\tcolor = 'theme'\n\tsize = '15px'\n\ttype = 'Text'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\tcornerRadius = '2px'\n\n\n\n\n\n    borderColor = '#5051F9'\n    borderWidth = '0px'\n\n\t  value = 'Add New Leave Requests'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\tpadding = '8px'\n\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t\n</pc>\n</pr>\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '5px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = 'theme'\n\tbgColor = '#F1F2F4'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'ui-2-square-add-08'\n\tsize = '16px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n\t\thAlign = 'left'\n>\n\t<text \n    action = 'OpenForm'\n\t\tcomponentLinkName = 'attendance_records'\n\t\ttarget = 'new-window'\n\n\tmarginLeft = '12px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\tpadding = '0px'\n\tcolor = 'theme'\n\tsize = '15px'\n\ttype = 'Text'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\tcornerRadius = '2px'\n\n\n\n\n\n    borderColor = '#5051F9'\n    borderWidth = '0px'\n\n\t  value = 'Add New Attendance Records'\n>\n</text>\n\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\tpadding = '8px'\n\n>\n\t<pr \n\t\t\twidth='auto'\n\t\theight='auto'\n>\n\t<pc \n\t\n>\n\t\n</pc>\n</pr>\n</pc>\n</pr><pr \n\t>\n\t<pc \n\t\n>\n\t<image  \n\t\tmarginLeft = '5px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\n\tcolor = 'theme'\n\tbgColor = '#F1F2F4'\n\twidth = '40px'\n\theight = '40px'\n\ttype = 'icon'\n\tvalue = 'ui-2-square-add-08'\n\tsize = '16px'\n\tcornerRadius = '10px'\n\ticonType = 'outline'\n/>\n</pc><pc \n\t\n\t\thAlign = 'left'\n>\n\t<text \n    action = 'OpenForm'\n\t\tcomponentLinkName = 'leave_balances'\n\t\ttarget = 'new-window'\n\n\tmarginLeft = '12px'\n\tmarginRight = '0px' \n\tmarginBottom = '0px'\n\tmarginTop = '0px'\n\tpadding = '0px'\n\tcolor = 'theme'\n\tsize = '15px'\n\ttype = 'Text'\n\n\tbgColor = 'transparent'\n        bgColorType = 'noFill'\n\tcornerRadius = '2px'\n\n\n\n\n\n    borderColor = '#5051F9'\n    borderWidth = '0px'\n\n\t  value = 'Add New Leave Balances'\n>\n</text>\n\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</pc>\n</pr>\n</panel>\n</column>\n</row><row>\n\t<column\n   \t\t width='100%'\n   \t>\n\t<chart \n\telementName='Chart 2'\n\n\t\n\ttitle = 'Status by Annual Leave Balance'\n\t\n\ttype = 'Bar'\n\txtitle = 'Status'\n\tytitle = 'Annual Leave Balance'\n\tbgColor = '#FFFFFF'\n\ttheme = 'theme'\n\tlegendPos = 'none'\n\theightType = 'auto'\n\theightValue = '300px'\n\tappLinkName = 'thisapp'\n\tformLinkName = 'employees'\n\txfield = 'status'\n\tyfields = 'sum:annual_leave_balance'\n\t\tDelugeCriteria = 'status is not null &amp;&amp; status != &quot;&quot;'\n/>\n\n</column>\n</row><row>\n\t<column\n   \t\t width='100%'\n   \t>\n\t<report \n\telementName='Report'\n\n\t\tappLinkName = 'thisapp'\n\t\tlinkName = 'employees_Report'\n\t\n\t\tiszreport = 'false'\n\theightType = 'auto'\n\theightValue = '700'\n\n/>\n</column>\n</row>\n</layout>\n</zml>"
+		}
+	}
+
+
+		workflow
+		{
+
+
+
+
+		blueprint
+		{
+    			attendance_tracking_and_alerts as "Attendance Tracking and Alerts"
+    			{
+        			type = Blueprint
+        			form = attendance_records
+        			start
+        			{
+            			start stage = "Attendance Record Created"
+        			}
+        			stages
+        			{
+           			"Attendance Record Created"
+           			{
+           			}
+           			"Check-in Verified"
+           			{
+           			}
+           			"Check-in Missing Alert"
+           			{
+           			}
+           			"Check-out Recorded"
+           			{
+           			}
+           			"Check-out Missing Alert"
+           			{
+           			}
+           			"Hours Validated"
+           			{
+           			}
+           			"Hours Anomaly Alert"
+           			{
+           			}
+           			"Attendance Approved"
+           			{
+           			}
+           			"Attendance Rejected"
+           			{
+           			}
+           			"Attendance Reviewed"
+           			{
+           			}
+           			"Attendance Marked Absent"
+           			{
+           			}
+           			"Attendance Marked Incomplete"
+           			{
+           			}
+           			"Attendance Finalized"
+           			{
+           			}
+           			"Attendance Re-submitted"
+           			{
+           			}
+        			}
+        			transitions
+        			{
+    				alert_hours_anomaly as "Trigger Anomaly Alert for Working Hours"
+    				{
+         				type = normal
+         				from stage = "Check-out Recorded"
+         				to stage = "Hours Anomaly Alert"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				alert_missing_check_in as "Trigger Check-in Missing Alert"
+    				{
+         				type = normal
+         				from stage = "Attendance Record Created"
+         				to stage = "Check-in Missing Alert"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				alert_missing_check_out as "Trigger Check-out Missing Alert"
+    				{
+         				type = normal
+         				from stage = "Check-in Verified"
+         				to stage = "Check-out Missing Alert"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				approve_after_review as "Approve After Anomaly Review"
+    				{
+         				type = normal
+         				from stage = "Hours Anomaly Alert"
+         				to stage = "Attendance Approved"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				approve_attendance as "Approve Attendance Record"
+    				{
+         				type = normal
+         				from stage = "Hours Validated"
+         				to stage = "Attendance Approved"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				finalize_absent as "Finalize Absent Record"
+    				{
+         				type = normal
+         				from stage = "Attendance Marked Absent"
+         				to stage = "Attendance Finalized"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				finalize_attendance as "Finalize Attendance Record"
+    				{
+         				type = normal
+         				from stage = "Attendance Approved"
+         				to stage = "Attendance Finalized"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				finalize_incomplete as "Finalize Incomplete Record"
+    				{
+         				type = normal
+         				from stage = "Attendance Marked Incomplete"
+         				to stage = "Attendance Finalized"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				mark_absent as "Mark as Absent with Reason"
+    				{
+         				type = normal
+         				from stage = "Check-in Missing Alert"
+         				to stage = "Attendance Marked Absent"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				mark_incomplete as "Mark as Incomplete with Reason"
+    				{
+         				type = normal
+         				from stage = "Check-out Missing Alert"
+         				to stage = "Attendance Marked Incomplete"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				record_check_out as "Record Check-out Time"
+    				{
+         				type = normal
+         				from stage = "Check-in Verified"
+         				to stage = "Check-out Recorded"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				record_late_check_out as "Record Late Check-out"
+    				{
+         				type = normal
+         				from stage = "Check-out Missing Alert"
+         				to stage = "Check-out Recorded"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				reject_after_review as "Reject After Review"
+    				{
+         				type = normal
+         				from stage = "Attendance Reviewed"
+         				to stage = "Attendance Rejected"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				reject_attendance as "Reject Attendance Record"
+    				{
+         				type = normal
+         				from stage = "Hours Validated"
+         				to stage = "Attendance Rejected"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				resubmit_attendance as "Re-submit Corrected Attendance"
+    				{
+         				type = normal
+         				from stage = "Attendance Rejected"
+         				to stage = "Attendance Re-submitted"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				review_anomaly as "Review Anomalous Hours"
+    				{
+         				type = normal
+         				from stage = "Hours Anomaly Alert"
+         				to stage = "Attendance Reviewed"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				validate_hours as "Validate Total Working Hours"
+    				{
+         				type = normal
+         				from stage = "Check-out Recorded"
+         				to stage = "Hours Validated"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				verify_check_in as "Verify Check-in Time"
+    				{
+         				type = normal
+         				from stage = "Attendance Record Created"
+         				to stage = "Check-in Verified"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				verify_late_check_in as "Verify Late Check-in"
+    				{
+         				type = normal
+         				from stage = "Check-in Missing Alert"
+         				to stage = "Check-in Verified"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+        			}
+    			}
+    			leave_request_approval_process as "Leave Request Approval Process"
+    			{
+        			type = Blueprint
+        			form = leave_requests
+        			start
+        			{
+            			start stage = "Leave Request Submitted"
+        			}
+        			stages
+        			{
+           			"Leave Request Submitted"
+           			{
+           			}
+           			"Pending Manager Approval"
+           			{
+           			}
+           			"Approved"
+           			{
+           			}
+           			"Rejected"
+           			{
+           			}
+           			"Pending Additional Information"
+           			{
+           			}
+           			"Leave Confirmed"
+           			{
+           			}
+           			"Pending HR Review"
+           			{
+           			}
+           			"Leave in Progress"
+           			{
+           			}
+           			"Leave Cancelled"
+           			{
+           			}
+           			"Leave Completed"
+           			{
+           			}
+           			"Leave Extended"
+           			{
+           			}
+           			"Leave Closed"
+           			{
+           			}
+        			}
+        			transitions
+        			{
+    				approve_leave as "Approve Leave Request"
+    				{
+         				type = normal
+         				from stage = "Pending Manager Approval"
+         				to stage = "Approved"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				cancel_confirmed_leave as "Cancel Confirmed Leave"
+    				{
+         				type = normal
+         				from stage = "Leave Confirmed"
+         				to stage = "Leave Cancelled"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				cancel_during_leave as "Cancel Leave During Period"
+    				{
+         				type = normal
+         				from stage = "Leave in Progress"
+         				to stage = "Leave Cancelled"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				close_leave as "Close Leave Record"
+    				{
+         				type = normal
+         				from stage = "Leave Completed"
+         				to stage = "Leave Closed"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				complete_leave as "Mark Leave as Completed"
+    				{
+         				type = normal
+         				from stage = "Leave in Progress"
+         				to stage = "Leave Completed"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				confirm_leave as "Confirm Leave Schedule"
+    				{
+         				type = normal
+         				from stage = "Approved"
+         				to stage = "Leave Confirmed"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				extend_leave as "Extend Leave Period"
+    				{
+         				type = normal
+         				from stage = "Leave in Progress"
+         				to stage = "Leave Extended"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				finalize_approval as "Finalize Approval"
+    				{
+         				type = normal
+         				from stage = "Pending HR Review"
+         				to stage = "Approved"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				reject_hr as "Reject After HR Review"
+    				{
+         				type = normal
+         				from stage = "Pending HR Review"
+         				to stage = "Rejected"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				reject_incomplete as "Reject Due to Incomplete Information"
+    				{
+         				type = normal
+         				from stage = "Pending Additional Information"
+         				to stage = "Rejected"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				reject_leave as "Reject Leave Request"
+    				{
+         				type = normal
+         				from stage = "Pending Manager Approval"
+         				to stage = "Rejected"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				reopen_cancelled as "Reopen Request"
+    				{
+         				type = normal
+         				from stage = "Leave Cancelled"
+         				to stage = "Leave Request Submitted"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				reopen_request as "Reopen Request for Resubmission"
+    				{
+         				type = normal
+         				from stage = "Rejected"
+         				to stage = "Leave Request Submitted"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				request_additional_info as "Request Additional Details"
+    				{
+         				type = normal
+         				from stage = "Pending Manager Approval"
+         				to stage = "Pending Additional Information"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				resubmit_with_info as "Resubmit with Additional Information"
+    				{
+         				type = normal
+         				from stage = "Pending Additional Information"
+         				to stage = "Pending Manager Approval"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				send_to_hr as "Send to HR for Final Validation"
+    				{
+         				type = normal
+         				from stage = "Approved"
+         				to stage = "Pending HR Review"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				start_leave as "Mark Leave as Active"
+    				{
+         				type = normal
+         				from stage = "Leave Confirmed"
+         				to stage = "Leave in Progress"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+    				submit_leave_request as "Submit Leave Request"
+    				{
+         				type = normal
+         				from stage = "Leave Request Submitted"
+         				to stage = "Pending Manager Approval"
+         				before
+         				{
+         				}
+         				after
+         				{
+         				}
+  				}
+        			}
+    			}
+		}
+
+
+	}
+	share_settings
+	{
+			"Read"
+			{
+				name = "Read"
+				type = Users_Permissions
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This profile will have read permission for all components\n"
+			}
+			"Write"
+			{
+				name = "Write"
+				type = Users_Permissions
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This profile will have write permission for all components\n"
+			}
+			"HR Administrator"
+			{
+				name = "HR Administrator"
+				type = Users_Permissions
+				permissions = {Chat:false, Predefined:false, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Manage employee onboarding and offboarding processes \n"
+				ModulePermissions
+				{
+					zoho_people_designation
+					{
+						enabled= Create,Viewall,Modifyall,Import,Export,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							zoho_people_designation_Report={"View","Edit","Delete"}
+						}
+					}
+					leave_requests
+					{
+						enabled= Viewall,Modifyall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							leave_requests_Report={"View","Edit","Delete"}
+							leave_requests_by_leave_type={"View","Edit","Delete"}
+						}
+					}
+					attendance_records
+					{
+						enabled= Viewall,Modifyall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							attendance_records_Report={"View","Edit","Delete"}
+							attendance_records_by_status={"View","Edit","Delete"}
+						}
+					}
+					zoho_people_employee
+					{
+						enabled= Create,Viewall,Modifyall,Import,Export,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							zoho_people_employee_Report={"View","Edit","Delete"}
+						}
+					}
+					employees
+					{
+						enabled= Create,Viewall,Modifyall,Import,Export,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							employees_Report={"View","Edit","Delete"}
+						}
+					}
+					zoho_people_department
+					{
+						enabled= Create,Viewall,Modifyall,Import,Export,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							zoho_people_department_Report={"View","Edit","Delete"}
+						}
+					}
+					notifications
+					{
+						enabled= Viewall,Modifyall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							notifications_by_type_1={"View","Edit","Delete"}
+							notifications_Report={"View","Edit","Delete"}
+						}
+					}
+					leave_balances
+					{
+						enabled= Create,Viewall,Modifyall,Import,Export,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							leave_balances_Report={"View","Edit","Delete"}
+						}
+					}
+				}
+			}
+			"Administrator"
+			{
+				name = "Administrator"
+				type = Users_Permissions
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This profile will have all the permissions.\n"
+			}
+			"Payroll Coordinator"
+			{
+				name = "Payroll Coordinator"
+				type = Users_Permissions
+				permissions = {Chat:false, Predefined:false, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Verify attendance and leave data for payroll processing \n"
+				ModulePermissions
+				{
+					attendance_records
+					{
+						enabled= Viewall,Export 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							attendance_records_Report={"View"}
+							attendance_records_by_status={"View"}
+						}
+					}
+					leave_requests
+					{
+						enabled= Viewall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							leave_requests_Report={"View"}
+							leave_requests_by_leave_type={"View"}
+						}
+					}
+					notifications
+					{
+						enabled= Viewall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							notifications_by_type_1={"View"}
+							notifications_Report={"View"}
+						}
+					}
+					leave_balances
+					{
+						enabled= Viewall,Export 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							leave_balances_Report={"View"}
+						}
+					}
+				}
+			}
+			"Developer"
+			{
+				name = "Developer"
+				type = Developer
+				permissions = {Chat:false, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Developer Profile\n"
+			}
+			"Department Manager"
+			{
+				name = "Department Manager"
+				type = Users_Permissions
+				permissions = {Chat:false, Predefined:false, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Review and approve or reject employee leave requests \n"
+				ModulePermissions
+				{
+					attendance_records
+					{
+						enabled= Viewall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							attendance_records_Report={"View"}
+							attendance_records_by_status={"View"}
+						}
+					}
+					leave_requests
+					{
+						enabled= Viewall,Modifyall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							leave_requests_Report={"View","Edit","Delete"}
+							leave_requests_by_leave_type={"View","Edit","Delete"}
+						}
+					}
+					notifications
+					{
+						enabled= Viewall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							notifications_by_type_1={"View"}
+							notifications_Report={"View"}
+						}
+					}
+					leave_balances
+					{
+						enabled= Viewall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							leave_balances_Report={"View"}
+						}
+					}
+				}
+			}
+			"System Administrator"
+			{
+				name = "System Administrator"
+				type = Users_Permissions
+				permissions = {Chat:false, Predefined:false, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Configure role-based access and permissions \n"
+				ModulePermissions
+				{
+					zoho_people_designation
+					{
+						enabled= Create,Viewall,Modifyall,Import,Export,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							zoho_people_designation_Report={"View","Edit","Delete"}
+						}
+					}
+					leave_requests
+					{
+						enabled= Create,Viewall,Modifyall,Import,Export,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							leave_requests_Report={"View","Edit","Delete"}
+							leave_requests_by_leave_type={"View","Edit","Delete"}
+						}
+					}
+					attendance_records
+					{
+						enabled= Create,Viewall,Modifyall,Import,Export,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							attendance_records_Report={"View","Edit","Delete"}
+							attendance_records_by_status={"View","Edit","Delete"}
+						}
+					}
+					zoho_people_employee
+					{
+						enabled= Create,Viewall,Modifyall,Import,Export,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							zoho_people_employee_Report={"View","Edit","Delete"}
+						}
+					}
+					employees
+					{
+						enabled= Create,Viewall,Modifyall,Import,Export,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							employees_Report={"View","Edit","Delete"}
+						}
+					}
+					zoho_people_department
+					{
+						enabled= Create,Viewall,Modifyall,Import,Export,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							zoho_people_department_Report={"View","Edit","Delete"}
+						}
+					}
+					notifications
+					{
+						enabled= Create,Viewall,Modifyall,Import,Export,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							notifications_by_type_1={"View","Edit","Delete"}
+							notifications_Report={"View","Edit","Delete"}
+						}
+					}
+					leave_balances
+					{
+						enabled= Create,Viewall,Modifyall,Import,Export,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							leave_balances_Report={"View","Edit","Delete"}
+						}
+					}
+				}
+			}
+			"Employee"
+			{
+				name = "Employee"
+				type = Customer_Portal
+				permissions = {Chat:false, Predefined:false, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Submit leave requests and track their status in real time \n"
+				ModulePermissions
+				{
+					attendance_records
+					{
+						enabled= Create,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							attendance_records_Report={"View"}
+							attendance_records_by_status={"View"}
+						}
+					}
+					leave_requests
+					{
+						enabled= Create,Tab 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							leave_requests_Report={"View","Edit"}
+							leave_requests_by_leave_type={"View","Edit"}
+						}
+					}
+					notifications
+					{
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							notifications_by_type_1={"View"}
+							notifications_Report={"View"}
+						}
+					}
+					leave_balances
+					{
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							leave_balances_Report={"View"}
+						}
+					}
+				}
+			}
+			"Manager"
+			{
+				name = "Manager"
+				type = Customer_Portal
+				permissions = {Chat:false, Predefined:false, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Approve or reject team members' leave requests \n"
+				ModulePermissions
+				{
+					attendance_records
+					{
+						enabled= Viewall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							attendance_records_Report={"View"}
+							attendance_records_by_status={"View"}
+						}
+					}
+					leave_requests
+					{
+						enabled= Viewall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							leave_requests_Report={"View","Edit"}
+							leave_requests_by_leave_type={"View","Edit"}
+						}
+					}
+					notifications
+					{
+						enabled= Viewall 
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							notifications_by_type_1={"View"}
+							notifications_Report={"View"}
+						}
+					}
+					leave_balances
+					{
+						allFieldsVisible= true 
+						ReportPermissions
+						{
+							leave_balances_Report={"View"}
+						}
+					}
+				}
+			}
+			"Customer"
+			{
+				name = "Customer"
+				type = Customer_Portal
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This is the default profile having only add and view permission.\n"
+			}
+			roles
+			{
+				"CEO"
+				{
+					description = "User belonging to this role can access data of all other users."
+				}
+			}
+	}
+
+
+	web
+	{
+		forms
+		{
+			form attendance_records
+			{
+				label placement = left
+			}
+			form employees
+			{
+				label placement = left
+			}
+			form leave_balances
+			{
+				label placement = left
+			}
+			form leave_requests
+			{
+				label placement = left
+			}
+			form notifications
+			{
+				label placement = left
+			}
+			form zoho_people_department
+			{
+				label placement = left
+			}
+			form zoho_people_designation
+			{
+				label placement = left
+			}
+			form zoho_people_employee
+			{
+				label placement = left
+			}
+		}
+		reports
+		{
+			report employees_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								name as "Name"
+								email as "Email"
+								department as "Department"
+								role as "Role"
+								joining_date as "Joining Date"
+								annual_leave_balance as "Annual Leave Balance"
+								sick_leave_balance as "Sick Leave Balance"
+								status as "Status"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								name as "Name"
+								email as "Email"
+								department as "Department"
+								role as "Role"
+								joining_date as "Joining Date"
+								annual_leave_balance as "Annual Leave Balance"
+								sick_leave_balance as "Sick Leave Balance"
+								status as "Status"
+							)
+						)
+						datablock2
+						(
+							layout type = -2
+		     				title = "Role"
+		     				related field = role
+							fields
+							(
+								designation_name as "Designation Name"
+								mail_alias as "Mail Alias"
+							)
+						)
+						datablock3
+						(
+							layout type = -2
+		     				title = "Department"
+		     				related field = department
+							fields
+							(
+								department_name as "Department Name"
+								mail_alias as "Mail Alias"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report leave_requests_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								employee as "Employee"
+								leave_type as "Leave Type"
+								start_date as "Start Date"
+								end_date as "End Date"
+								days_requested as "Number of Days"
+								reason as "Reason"
+								status as "Status"
+								manager_comment as "Manager Approval Comment"
+								submitted_at as "Submitted At"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								employee as "Employee"
+								leave_type as "Leave Type"
+								start_date as "Start Date"
+								end_date as "End Date"
+								days_requested as "Number of Days"
+								reason as "Reason"
+								status as "Status"
+								manager_comment as "Manager Approval Comment"
+								submitted_at as "Submitted At"
+							)
+						)
+						datablock2
+						(
+							layout type = -2
+		     				title = "Employee"
+		     				related field = employee
+							fields
+							(
+								about_me as "About Me"
+								date_of_birth as "Date of Birth"
+								date_of_exit as "Date of Exit"
+								date_of_joining as "Date of Joining"
+								email_address as "Email address"
+								employment_type as "Employment Type"
+								employee_id as "Employee ID"
+								employee_status as "Employee Status"
+								ask_me_about_expertise as "Ask me about/Expertise"
+								extension as "Extension"
+								first_name1 as "First Name"
+								gender as "Gender"
+								last_name1 as "Last Name"
+								marital_status as "Marital Status"
+								personal_mobile_number as "Personal Mobile Number"
+								preferred_name as "Preferred Name"
+								personal_email_address as "Personal Email Address"
+								single_line_1 as "Single Line 1"
+								social_security_system_joined_date as "Social Security System Joined Date"
+								source_of_hire as "Source of Hire"
+								tags as "Tags"
+								seating_location as "Seating Location"
+								work_phone_number as "Work Phone Number"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report leave_requests_by_leave_type
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = 1
+							fields
+							(
+								employee as "Employee"
+								start_date as "Start Date"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+							fields
+							(
+								employee as "Employee"
+								leave_type as "Leave Type"
+								start_date as "Start Date"
+								end_date as "End Date"
+								days_requested as "Number of Days"
+								reason as "Reason"
+								status as "Status"
+								manager_comment as "Manager Approval Comment"
+								submitted_at as "Submitted At"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report attendance_records_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								employee as "Employee"
+								date_1 as "Date"
+								check_in as "Check-in Time"
+								check_out as "Check-out Time"
+								total_hours as "Total Working Hours"
+								status as "Status"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								employee as "Employee"
+								date_1 as "Date"
+								check_in as "Check-in Time"
+								check_out as "Check-out Time"
+								total_hours as "Total Working Hours"
+								status as "Status"
+							)
+						)
+						datablock2
+						(
+							layout type = -2
+		     				title = "Employee"
+		     				related field = employee
+							fields
+							(
+								about_me as "About Me"
+								date_of_birth as "Date of Birth"
+								date_of_exit as "Date of Exit"
+								date_of_joining as "Date of Joining"
+								email_address as "Email address"
+								employment_type as "Employment Type"
+								employee_id as "Employee ID"
+								employee_status as "Employee Status"
+								ask_me_about_expertise as "Ask me about/Expertise"
+								extension as "Extension"
+								first_name1 as "First Name"
+								gender as "Gender"
+								last_name1 as "Last Name"
+								marital_status as "Marital Status"
+								personal_mobile_number as "Personal Mobile Number"
+								preferred_name as "Preferred Name"
+								personal_email_address as "Personal Email Address"
+								single_line_1 as "Single Line 1"
+								social_security_system_joined_date as "Social Security System Joined Date"
+								source_of_hire as "Source of Hire"
+								tags as "Tags"
+								seating_location as "Seating Location"
+								work_phone_number as "Work Phone Number"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report attendance_records_by_status
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = 1
+							fields
+							(
+								employee as "Employee"
+								date_1 as "Date"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+							fields
+							(
+								employee as "Employee"
+								date_1 as "Date"
+								check_in as "Check-in Time"
+								check_out as "Check-out Time"
+								total_hours as "Total Working Hours"
+								status as "Status"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report leave_balances_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								employee as "Employee"
+								annual_balance as "Annual Leave Balance"
+								sick_balance as "Sick Leave Balance"
+								last_updated as "Last Updated"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								employee as "Employee"
+								annual_balance as "Annual Leave Balance"
+								sick_balance as "Sick Leave Balance"
+								last_updated as "Last Updated"
+							)
+						)
+						datablock2
+						(
+							layout type = -2
+		     				title = "Employee"
+		     				related field = employee
+							fields
+							(
+								about_me as "About Me"
+								date_of_birth as "Date of Birth"
+								date_of_exit as "Date of Exit"
+								date_of_joining as "Date of Joining"
+								email_address as "Email address"
+								employment_type as "Employment Type"
+								employee_id as "Employee ID"
+								employee_status as "Employee Status"
+								ask_me_about_expertise as "Ask me about/Expertise"
+								extension as "Extension"
+								first_name1 as "First Name"
+								gender as "Gender"
+								last_name1 as "Last Name"
+								marital_status as "Marital Status"
+								personal_mobile_number as "Personal Mobile Number"
+								preferred_name as "Preferred Name"
+								personal_email_address as "Personal Email Address"
+								single_line_1 as "Single Line 1"
+								social_security_system_joined_date as "Social Security System Joined Date"
+								source_of_hire as "Source of Hire"
+								tags as "Tags"
+								seating_location as "Seating Location"
+								work_phone_number as "Work Phone Number"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report notifications_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								recipient as "Recipient"
+								type_1 as "Type"
+								message as "Message"
+								sent_at as "Sent At"
+								is_read as "Is Read"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								recipient as "Recipient"
+								type_1 as "Type"
+								message as "Message"
+								sent_at as "Sent At"
+								is_read as "Is Read"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report notifications_by_type_1
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = 1
+							fields
+							(
+								recipient as "Recipient"
+								message as "Message"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+							fields
+							(
+								recipient as "Recipient"
+								type_1 as "Type"
+								message as "Message"
+								sent_at as "Sent At"
+								is_read as "Is Read"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report zoho_people_employee_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								about_me as "About Me"
+								date_of_birth as "Date of Birth"
+								date_of_exit as "Date of Exit"
+								date_of_joining as "Date of Joining"
+								email_address as "Email address"
+								employment_type as "Employment Type"
+								employee_id as "Employee ID"
+								employee_status as "Employee Status"
+								ask_me_about_expertise as "Ask me about/Expertise"
+								extension as "Extension"
+								first_name1 as "First Name"
+								gender as "Gender"
+								last_name1 as "Last Name"
+								marital_status as "Marital Status"
+								personal_mobile_number as "Personal Mobile Number"
+								preferred_name as "Preferred Name"
+								personal_email_address as "Personal Email Address"
+								single_line_1 as "Single Line 1"
+								social_security_system_joined_date as "Social Security System Joined Date"
+								source_of_hire as "Source of Hire"
+								tags as "Tags"
+								seating_location as "Seating Location"
+								work_phone_number as "Work Phone Number"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								about_me as "About Me"
+								date_of_birth as "Date of Birth"
+								date_of_exit as "Date of Exit"
+								date_of_joining as "Date of Joining"
+								email_address as "Email address"
+								employment_type as "Employment Type"
+								employee_id as "Employee ID"
+								employee_status as "Employee Status"
+								ask_me_about_expertise as "Ask me about/Expertise"
+								extension as "Extension"
+								first_name1 as "First Name"
+								gender as "Gender"
+								last_name1 as "Last Name"
+								marital_status as "Marital Status"
+								personal_mobile_number as "Personal Mobile Number"
+								preferred_name as "Preferred Name"
+								personal_email_address as "Personal Email Address"
+								single_line_1 as "Single Line 1"
+								social_security_system_joined_date as "Social Security System Joined Date"
+								source_of_hire as "Source of Hire"
+								tags as "Tags"
+								seating_location as "Seating Location"
+								work_phone_number as "Work Phone Number"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report zoho_people_designation_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								designation_name as "Designation Name"
+								mail_alias as "Mail Alias"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								designation_name as "Designation Name"
+								mail_alias as "Mail Alias"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+			report zoho_people_department_Report
+			{
+				quickview
+				(
+					layout
+					(
+		 				type = -1
+						datablock1
+						(
+							layout type = -1
+							fields
+							(
+								department_name as "Department Name"
+								mail_alias as "Mail Alias"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    		 				Add 
+    		 				Import 
+    		 				Export 
+    	 				)
+						record
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+    					)
+    				)
+    				action
+    				(
+						on click
+						(
+							View Record   	   
+    					)
+						on right click
+						(
+							Edit   	   
+							Duplicate   	   
+							Delete   	   
+							Print   	   
+							View Record   	   
+    					)
+     				)
+				)
+
+				detailview
+				(
+					layout
+					(
+		 				type = 1
+						datablock1
+						(
+							layout type = -2
+		     				title = "Overview"
+							fields
+							(
+								department_name as "Department Name"
+								mail_alias as "Mail Alias"
+							)
+						)
+					)
+					menu
+    				(
+    	 				header
+    	 				(
+    		 				Edit 
+    		 				Duplicate 
+    		 				Delete 
+    		 				Print 
+    	 				)
+    				)
+				)
+			}
+		}
+		menu
+		{
+			space Space
+			{
+				displayname = "Space"
+				icon = "objects-spaceship"
+
+				section Section_1
+				{
+					displayname = "Dashboard"
+					icon = "ui-1-dashboard-half"
+					page DashBoard
+					{
+						icon = "ui-1-dashboard-half"
+					}
+				}
+				section Section_2
+				{
+					displayname = "Employees"
+					icon = "users-single-04"
+					form  employees
+					{
+						icon = "ui-1-bold-add"
+					}
+					report employees_Report
+					{
+						icon = "users-single-04"
+					}
+				}
+				section Section_3
+				{
+					displayname = "Requests"
+					icon = "shopping-delivery"
+					form  leave_requests
+					{
+						icon = "ui-1-bold-add"
+					}
+					report leave_requests_Report
+					{
+						icon = "travel-world"
+					}
+					report leave_requests_by_leave_type
+					{
+						icon = "design-2-cursor-not-allowed"
+					}
+				}
+				section Section_4
+				{
+					displayname = "Attendance Records"
+					icon = "users-2-voice-record"
+					form  attendance_records
+					{
+						icon = "ui-1-bold-add"
+					}
+					report attendance_records_Report
+					{
+						icon = "travel-world"
+					}
+					report attendance_records_by_status
+					{
+						icon = "design-2-selection"
+					}
+				}
+				section Section_5
+				{
+					displayname = "Balances"
+					icon = "sport-user-snowboard"
+					form  leave_balances
+					{
+						icon = "ui-1-bold-add"
+					}
+					report leave_balances_Report
+					{
+						icon = "travel-world"
+					}
+				}
+				section Section_6
+				{
+					displayname = "Notifications"
+					icon = "ui-1-email-84"
+					form  notifications
+					{
+						icon = "ui-1-bold-add"
+					}
+					report notifications_Report
+					{
+						icon = "travel-world"
+					}
+					report notifications_by_type_1
+					{
+						icon = "tech-2-keyboard-wireless"
+					}
+				}
+				section Section_7
+				{
+					displayname = "Zoho People Employee"
+					icon = "business-business-contact-89"
+					form  zoho_people_employee
+					{
+						icon = "ui-1-bold-add"
+					}
+					report zoho_people_employee_Report
+					{
+						icon = "business-business-contact-89"
+					}
+				}
+				section Section_8
+				{
+					displayname = "Zoho People Designation"
+					icon = "users-2-wc"
+					form  zoho_people_designation
+					{
+						icon = "ui-1-bold-add"
+					}
+					report zoho_people_designation_Report
+					{
+						icon = "design-note-code"
+					}
+				}
+				section Section_9
+				{
+					displayname = "Zoho People Department"
+					icon = "users-2-wc"
+					form  zoho_people_department
+					{
+						icon = "ui-1-bold-add"
+					}
+					report zoho_people_department_Report
+					{
+						icon = "business-laptop-71"
+					}
+				}
+				section ZC_App_Preferences
+				{
+					displayname = "App Preferences"
+					icon = "design-app"
+					systemcomponent
+					{
+						type = localization
+						displayname = "Language Selection"
+						icon = "education-language"
+					}
+					systemcomponent
+					{
+						type = connection
+						displayname = "Integrations"
+						icon = "tech-2-connection"
+					}
+				}
+				section ZC_Approvals
+				{
+					displayname = "Approvals"
+					icon = "ui-2-hourglass"
+					systemcomponent
+					{
+						type = approval
+						approval status = pending
+						displayname = "Pending Tasks"
+						icon = "ui-2-hourglass"
+					}
+					systemcomponent
+					{
+						type = approval
+						approval status = completed
+						displayname = "Completed Tasks"
+						icon = "design-todo"
+					}
+				}
+				section SharedAnalytics_Section
+				{
+					type = shared_user_report_section
+					displayname = "Reports"
+					icon = "business-chart-bar-33"
+				}
+			}
+			preference
+			{
+				icon
+				{
+					style = solid
+					show = {space,section,component}
+				}
+			}
+		}
+		customize
+		{
+			new theme = 11
+			font = "poppins"
+			color options
+			{
+				color = "3"
+			}
+			logo
+			{
+				preference = "none"
+				placement = "left"
+			}
+		}
+	}
+	phone
+	{
+		forms
+		{
+			form attendance_records
+			{
+				label placement = auto
+			}
+			form employees
+			{
+				label placement = auto
+			}
+			form leave_balances
+			{
+				label placement = auto
+			}
+			form leave_requests
+			{
+				label placement = auto
+			}
+			form notifications
+			{
+				label placement = auto
+			}
+			form zoho_people_department
+			{
+				label placement = auto
+			}
+			form zoho_people_designation
+			{
+				label placement = auto
+			}
+			form zoho_people_employee
+			{
+				label placement = auto
+			}
+		}
+		customize
+		{
+			layout = slidingpane
+			font = "default"
+			style = "3"
+			color options
+			{
+				color = amethyst
+			}
+			logo
+			{
+				preference = "none"
+			}
+		}
+	}
+	tablet
+	{
+		forms
+		{
+			form attendance_records
+			{
+				label placement = auto
+			}
+			form employees
+			{
+				label placement = auto
+			}
+			form leave_balances
+			{
+				label placement = auto
+			}
+			form leave_requests
+			{
+				label placement = auto
+			}
+			form notifications
+			{
+				label placement = auto
+			}
+			form zoho_people_department
+			{
+				label placement = auto
+			}
+			form zoho_people_designation
+			{
+				label placement = auto
+			}
+			form zoho_people_employee
+			{
+				label placement = auto
+			}
+		}
+		customize
+		{
+			layout = slidingpane
+			font = "default"
+			style = "3"
+			color options
+			{
+				color = amethyst
+			}
+			logo
+			{
+				preference = "none"
+			}
+		}
+	}
+	translation
+{
+{"Language_Settings":{"LANGAGUE_WITH_LOGIN":"browser"}}
+}
+}
